@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="showdyy">
+<meta property="og:title" content="showdyy">
+<meta property="og:image" content="ava.jpg">
+<link rel="icon" href="ava.jpg">
+<title>showdyy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Special+Elite&family=Cormorant+Garamond:ital,wght@1,400&family=IBM+Plex+Mono:wght@300;400&display=swap">
+<style>
+/* Layout: a concrete wall in a dark room. Photos and notes are pinned to it and tied together with thread; your flashlight finds them. Everything can be unpinned and moved, the threads follow */
+:root{
+  --wall:#111213;
+  --paper:#dcdddb;
+  --note:#c9cac6;
+  --ink:#1c1c1b;
+  --bone:#d7d8d6;
+  --smoke:#6d6e6c;
+  --thread:#8d8f92;
+  --line:rgba(215,216,214,.12);
+  --hand:"Caveat",cursive;
+  --type:"Special Elite","Courier New",monospace;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--wall);color:var(--bone);font-family:var(--mono);font-weight:300;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.concrete{position:fixed;inset:0;background:
+  radial-gradient(circle at 20% 30%,rgba(255,255,255,.025) 0 1px,transparent 1.5px) 0 0/7px 7px,
+  radial-gradient(circle at 70% 60%,rgba(0,0,0,.35) 0 1px,transparent 1.5px) 0 0/11px 11px,
+  linear-gradient(180deg,#17181a,#0e0f10)}
+.stain{position:fixed;inset:0;pointer-events:none;background:
+  radial-gradient(ellipse 30% 50% at 85% 0%,rgba(0,0,0,.4),transparent 70%),
+  radial-gradient(ellipse 20% 40% at 10% 100%,rgba(0,0,0,.35),transparent 70%)}
+
+/* flashlight */
+.dark{position:fixed;inset:0;z-index:30;pointer-events:none;
+  background:radial-gradient(circle var(--r,230px) at var(--x,50%) var(--y,45%),rgba(4,4,5,0) 0%,rgba(4,4,5,.45) 50%,rgba(4,4,5,.9) 100%)}
+.beam{position:fixed;inset:0;z-index:31;pointer-events:none;mix-blend-mode:soft-light;
+  background:radial-gradient(circle calc(var(--r,230px)*.7) at var(--x,50%) var(--y,45%),rgba(230,235,240,.35),transparent 70%)}
+.off .dark{background:rgba(4,4,5,.97)}
+
+/* threads */
+svg#threads{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+svg#threads path{fill:none;stroke:var(--thread);stroke-width:1.3;opacity:.75}
+
+/* pinned things */
+.wallz{position:fixed;inset:0;z-index:6}
+.item{position:absolute;left:0;top:0;transform:translate(var(--px),var(--py)) rotate(var(--rot,0deg));transform-origin:50% 0;
+  cursor:grab;touch-action:none;user-select:none;box-shadow:6px 14px 22px -6px rgba(0,0,0,.85);will-change:transform;
+  animation:sway 6s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes sway{50%{rotate:.6deg}}
+.item.lift{cursor:grabbing;box-shadow:14px 30px 40px -10px rgba(0,0,0,.95);animation:none}
+.item:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+.pin{position:absolute;left:50%;top:-6px;width:14px;height:14px;margin-left:-7px;border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 35% 35%,#d9dadc,#55575a 60%,#2b2c2e);box-shadow:2px 4px 4px rgba(0,0,0,.7)}
+.photo{width:var(--w,200px);background:var(--paper);padding:10px 10px 0;color:var(--ink)}
+.photo .im{aspect-ratio:1;overflow:hidden;background:#111}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;filter:grayscale(1) contrast(1.15) brightness(.85)}
+.photo figcaption{font-family:var(--hand);font-weight:700;font-size:1.45rem;text-align:center;padding:8px 2px 12px;line-height:1}
+.photo figcaption small{display:block;font-weight:500;font-size:1rem;color:#5c5d5b}
+.name{padding:18px 26px 14px;background:var(--note);color:var(--ink);
+  clip-path:polygon(0 4%,8% 0,22% 3%,41% 0,63% 4%,82% 1%,100% 5%,98% 92%,86% 100%,62% 96%,40% 100%,18% 95%,2% 100%)}
+.name h1{margin:0;font-family:var(--hand);font-weight:700;font-size:var(--fs,4.4rem);line-height:.9;color:#141414}
+.name p{margin:4px 0 0;font-family:var(--type);font-size:.8rem;color:#4b4c4a}
+.paper{width:var(--w,210px);padding:18px 18px 16px;background:var(--note);color:var(--ink)}
+.paper h2{margin:0 0 8px;font-family:var(--type);font-weight:400;font-size:.85rem;letter-spacing:.06em;color:#3b3c3a}
+.paper ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.paper ul{gap:7px}
+.paper .btn{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding:5px 10px 6px;border:1.5px solid #2a2a29;border-radius:3px;font-family:var(--hand);font-weight:700;font-size:1.35rem;line-height:1.05;color:#1d1d1c;
+  transition:background .15s,color .15s,transform .1s}
+.paper .btn span{font-family:var(--type);font-weight:400;font-size:.62rem;color:#5d5e5b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.paper .btn:hover,.paper .btn:focus-visible{background:#1d1d1c;color:var(--note)}
+.paper .btn:hover span,.paper .btn:focus-visible span{color:#a9aaa6}
+.paper .btn:active{transform:translateY(1px)}
+.ticket{width:var(--w,180px);padding:12px 14px;background:#bfc0bc;color:var(--ink);font-family:var(--type);font-size:.78rem;line-height:1.5;
+  border-left:2px dashed #8e8f8b}
+.ticket b{display:block;font-size:.62rem;letter-spacing:.2em;color:#5c5d5a;font-weight:400}
+
+/* track strip */
+.np{position:fixed;z-index:50;top:0;left:0;right:0;display:flex;justify-content:center;pointer-events:none;
+  padding-top:calc(env(safe-area-inset-top,0px) + 14px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.np-in{pointer-events:auto;display:flex;align-items:center;gap:12px;min-width:0;max-width:100%;padding:7px 14px;background:rgba(8,8,9,.8);border:1px solid var(--line);font-size:.68rem;color:var(--smoke)}
+.np button{all:unset;cursor:pointer;width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px solid var(--smoke);color:var(--bone)}
+.np button svg{width:10px;height:10px;fill:currentColor}
+.np button:focus-visible,.np a:focus-visible{outline:1px solid var(--bone);outline-offset:3px}
+.np .tt{min-width:0;display:flex;flex-direction:column}
+.np .tt b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1rem;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np .ln{width:100px;height:1px;background:var(--line);position:relative;flex:none;cursor:pointer}
+.np .ln i{position:absolute;inset:0 auto 0 0;width:0;background:var(--bone)}
+.np .tm{font-variant-numeric:tabular-nums;flex:none}
+.np a{color:var(--smoke);text-decoration:none;flex:none}
+.np a:hover{color:var(--bone)}
+.hint{position:fixed;z-index:40;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);text-align:center;font-size:.62rem;letter-spacing:.3em;color:var(--smoke);pointer-events:none;transition:opacity 1s}
+
+/* entrance */
+#gate{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+#gate.gone{opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+#gate button{all:unset;position:absolute;inset:0;cursor:pointer}
+#gate button:focus-visible{outline:1px solid var(--smoke);outline-offset:-12px}
+#gate .w{font-family:var(--type);font-size:clamp(1.2rem,4vw,1.7rem);color:var(--bone);pointer-events:none;min-height:1.4em}
+#gate .h{font-size:.64rem;letter-spacing:.4em;color:var(--smoke);pointer-events:none;animation:pl 3s ease-in-out infinite}
+@keyframes pl{50%{opacity:.25}}
+
+@media (max-width:520px){.np .ln{display:none}.paper .btn span{display:none}.paper{padding:16px 14px 14px}.ticket{font-size:.7rem}}
+@media (hover:none){.dark{background:radial-gradient(circle var(--r,230px) at var(--x,50%) var(--y,45%),rgba(4,4,5,0) 0%,rgba(4,4,5,.4) 55%,rgba(4,4,5,.8) 100%)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="concrete" aria-hidden="true"></div>
+<div class="stain" aria-hidden="true"></div>
+<svg id="threads" aria-hidden="true"></svg>
+
+<main class="wallz" id="wall">
+  <div class="item name" data-k="name" tabindex="0" style="--d:-1s"><span class="pin"></span>
+    <h1>showdyy</h1><p>местонахождение: неизвестно</p></div>
+
+  <figure class="item photo" data-k="me" tabindex="0" style="--d:-2s;margin:0"><span class="pin"></span>
+    <div class="im"><img src="ava.jpg" alt="аватар showdyy"></div>
+    <figcaption>он<small>последний снимок</small></figcaption></figure>
+
+  <figure class="item photo" data-k="place" tabindex="0" style="--d:-3.5s;margin:0"><span class="pin"></span>
+    <div class="im"><img src="bg.jpg" alt="храм в тумане"></div>
+    <figcaption>видели здесь<small>туман, ночь</small></figcaption></figure>
+
+  <div class="item paper" data-k="links" style="--d:-.5s"><span class="pin"></span>
+    <h2>СВЯЗЬ:</h2>
+    <ul>
+      <li><a class="btn" href="https://discord.com/users/1197533722161971233" target="_blank" rel="noopener">discord <span>showdyy ↗</span></a></li>
+      <li><a class="btn" href="https://t.me/showdyy" target="_blank" rel="noopener">telegram <span>@showdyy ↗</span></a></li>
+      <li><a class="btn" href="https://steamcommunity.com/profiles/76561199835001805/" target="_blank" rel="noopener">steam <span>профиль ↗</span></a></li>
+      <li><a class="btn" href="https://www.tiktok.com/@wtfsh0wdyych" target="_blank" rel="noopener">tiktok <span>@wtfsh0wdyych ↗</span></a></li>
+      <li><a class="btn" href="https://github.com/showdyy" target="_blank" rel="noopener">github <span>showdyy ↗</span></a></li>
+    </ul></div>
+
+  <div class="item ticket" data-k="time" tabindex="0" style="--d:-4.4s"><span class="pin"></span>
+    <b>ЕГО ВРЕМЯ</b><span id="clock">--:--</span> · utc+5<br>в сети ночью</div>
+</main>
+
+<div class="dark" aria-hidden="true"></div>
+<div class="beam" aria-hidden="true"></div>
+
+<header class="np"><div class="np-in">
+  <button id="play" type="button" aria-label="Включить трек"><svg viewBox="0 0 24 24" id="pi"><path d="M7 4v16l13-8z"/></svg></button>
+  <span class="tt"><span id="st">тихо</span><b>дело 0417 — ночной эмбиент</b></span>
+  <span class="ln" id="ln"><i id="fill"></i></span>
+  <span class="tm" id="tm">0:00</span>
+</div></header>
+<div class="hint" id="hint">свети фонариком · снимки можно двигать</div>
+
+<div id="gate">
+  <div class="w" id="gw"></div>
+  <div class="h">нажми, чтобы включить фонарик</div>
+  <button id="go" type="button" aria-label="Войти"></button>
+</div>
+
+<script>
+(()=>{
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+
+/* typewriter on the gate */
+const gtext='дело № 0417. showdyy.';let gi=0;
+(function t(){$('gw').textContent=gtext.slice(0,++gi);if(gi<gtext.length)setTimeout(t,reduce?0:70);})();
+
+/* positions */
+const items=[...document.querySelectorAll('.item')];const S={};
+function layout(){
+  const w=innerWidth,h=innerHeight,n=w<700;
+  const u=n?Math.min(w*.4,170):Math.min(w*.17,220);
+  const spots=n?{
+    name:{x:w*.05,y:h*.09,rot:-2,fs:Math.min(w*.15,64)},
+    me:{x:w*.04,y:h*.26,rot:-4,w:(w-56)/2},
+    place:{x:w*.52,y:h*.28,rot:5,w:(w-56)/2},
+    links:{x:w*.4,y:h*.57,rot:2,w:Math.min(230,w*.56)},
+    time:{x:w*.04,y:h*.62,rot:-3,w:Math.min(160,w*.34)}}
+   :{name:{x:w*.36,y:h*.12,rot:-2,fs:Math.min(w*.07,84)},
+    me:{x:w*.12,y:h*.24,rot:-5,w:u},
+    place:{x:w*.62,y:h*.3,rot:6,w:u*1.1},
+    links:{x:w*.38,y:h*.45,rot:-3,w:Math.min(220,w*.18)},
+    time:{x:w*.15,y:h*.7,rot:4,w:180}};
+  items.forEach(el=>{const k=el.dataset.k,s=spots[k];if(!S[k]||!S[k].moved)S[k]={...s,moved:false};else{S[k].w=s.w;S[k].fs=s.fs;}paint(el);});
+  threads();
+}
+function paint(el){const s=S[el.dataset.k];el.style.setProperty('--px',s.x+'px');el.style.setProperty('--py',s.y+'px');el.style.setProperty('--rot',s.rot+'deg');
+  if(s.w)el.style.setProperty('--w',s.w+'px');if(s.fs)el.style.setProperty('--fs',s.fs+'px');}
+
+/* threads between pins */
+const links=[['name','me'],['name','place'],['me','links'],['place','links'],['links','time'],['me','time']];
+const svg=$('threads');
+function pinXY(k){const el=document.querySelector(`.item[data-k="${k}"] .pin`).getBoundingClientRect();return[el.left+el.width/2,el.top+el.height/2];}
+function threads(){
+  svg.innerHTML=links.map(([a,b])=>{const[x1,y1]=pinXY(a),[x2,y2]=pinXY(b);
+    const sag=Math.min(60,Math.hypot(x2-x1,y2-y1)*.12);const mx=(x1+x2)/2,my=(y1+y2)/2+sag;
+    return `<path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}"/>`;}).join('');
+}
+layout();addEventListener('resize',layout);
+if(document.fonts)document.fonts.ready.then(layout);
+if(!reduce)(function tl(){threads();requestAnimationFrame(tl);})();
+
+/* drag */
+let z=10;
+items.forEach(el=>{const s=()=>S[el.dataset.k];let d=null;
+  el.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;d={ox:e.clientX-s().x,oy:e.clientY-s().y};el.setPointerCapture(e.pointerId);el.classList.add('lift');el.style.zIndex=++z;});
+  el.addEventListener('pointermove',e=>{if(!d)return;const st=s();st.x=e.clientX-d.ox;st.y=e.clientY-d.oy;st.moved=true;paint(el);threads();$('hint').style.opacity=0;});
+  const up=()=>{d=null;el.classList.remove('lift');};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+});
+
+/* flashlight */
+let tx=innerWidth/2,ty=innerHeight*.4,lx=tx,ly=ty,moved=0,on=false;
+addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;moved=performance.now();});
+addEventListener('pointerdown',e=>{tx=e.clientX;ty=e.clientY;moved=performance.now();});
+const R=()=>Math.max(170,Math.min(innerWidth,innerHeight)*.36);
+(function loop(t){
+  if(t-moved>4000){tx=innerWidth/2+Math.sin(t/3400)*innerWidth*.28;ty=innerHeight*.45+Math.cos(t/2600)*innerHeight*.25;}
+  lx+=(tx-lx)*.1;ly+=(ty-ly)*.1;
+  const fl=reduce?1:1+(Math.random()-.5)*.02;
+  root.style.setProperty('--x',lx+'px');root.style.setProperty('--y',ly+'px');root.style.setProperty('--r',(R()*fl)+'px');
+  requestAnimationFrame(loop);})(0);
+
+/* clock */
+function clock(){$('clock').textContent=new Date().toLocaleTimeString('ru-RU',{timeZone:'Asia/Qyzylorda',hour:'2-digit',minute:'2-digit'});}
+clock();setInterval(clock,10000);
+
+/* music: generated live — rain, low drone, slow minor piano */
+let ac,master,playing=false,t0=0,elapsed=0,timer,parts=[];
+const A=110,minor=[0,3,5,7,10,12,15,17,19,22,24];
+const hz=n=>A*Math.pow(2,n/12);
+function build(){
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+  // room: feedback delay as cheap reverb
+  const dl=ac.createDelay(2);dl.delayTime.value=.47;const fb=ac.createGain();fb.gain.value=.48;
+  const dlp=ac.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=2200;
+  dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(master);master.room=dl;
+  // rain
+  const buf=ac.createBuffer(1,ac.sampleRate*3,ac.sampleRate),ch=buf.getChannelData(0);
+  let last=0;for(let i=0;i<ch.length;i++){const w=Math.random()*2-1;last=(last+.04*w)/1.04;ch[i]=last*3+(Math.random()<.0008?(Math.random()-.5)*.8:0);}
+  const rn=ac.createBufferSource();rn.buffer=buf;rn.loop=true;
+  const rf=ac.createBiquadFilter();rf.type='bandpass';rf.frequency.value=1400;rf.Q.value=.4;
+  const rg=ac.createGain();rg.gain.value=.22;rn.connect(rf);rf.connect(rg);rg.connect(master);rn.start();
+  // drone
+  [hz(-12),hz(-5),hz(0)].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),lf=ac.createOscillator(),lg=ac.createGain();
+    o.type=i?'sine':'triangle';o.frequency.value=f;o.detune.value=(i-1)*4;g.gain.value=[.07,.035,.025][i];
+    lf.frequency.value=.05+i*.03;lg.gain.value=g.gain.value*.6;lf.connect(lg);lg.connect(g.gain);
+    o.connect(g);g.connect(master);o.start();lf.start();});
+}
+function piano(f,t,v){
+  [1,2,3.01].forEach((m,k)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f*m;
+    const vv=v*[1,.35,.12][k];g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vv,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+3.5-k);
+    o.connect(g);g.connect(master);g.connect(master.room);o.start(t);o.stop(t+3.6);});
+}
+let deg=4;
+function phrase(){
+  const t=ac.currentTime+.05;let w=t;
+  const n=Math.random()<.3?1:2+Math.floor(Math.random()*3);
+  for(let i=0;i<n;i++){deg=Math.max(0,Math.min(minor.length-1,deg+[-2,-1,-1,0,1,2][Math.floor(Math.random()*6)]));
+    piano(hz(minor[deg]),w,.09+Math.random()*.04);if(Math.random()<.35)piano(hz(minor[deg]-12),w,.06);
+    w+=[.6,.9,1.2,1.8][Math.floor(Math.random()*4)];}
+}
+function play(){
+  if(!ac)build();ac.resume();
+  master.gain.cancelScheduledValues(ac.currentTime);master.gain.setTargetAtTime(.55,ac.currentTime,1.2);
+  phrase();timer=setInterval(phrase,4200);t0=performance.now()-elapsed*1000;playing=true;ui();
+}
+function pause(){if(!ac)return;clearInterval(timer);master.gain.setTargetAtTime(0,ac.currentTime,.4);elapsed=(performance.now()-t0)/1000;playing=false;ui();}
+function ui(){$('pi').innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M7 4v16l13-8z"/>';
+  $('play').setAttribute('aria-label',playing?'Пауза':'Включить музыку');$('st').textContent=playing?'сейчас играет':'тихо';}
+setInterval(()=>{if(!playing)return;const s=(performance.now()-t0)/1000;$('tm').textContent=`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  $('fill').style.width=((s%64)/64*100)+'%';},500);
+function start(){try{play();}catch(e){$('st').textContent='звук недоступен';}}
+$('play').addEventListener('click',()=>{try{playing?pause():play();}catch(e){}});
+
+/* entrance: flashlight clicks on with a stutter */
+$('go').addEventListener('click',()=>{
+  start();$('gate').classList.add('gone');
+  if(reduce)return;
+  document.body.classList.add('off');
+  [[120,0],[200,1],[260,0],[420,1],[480,0],[650,1]].forEach(([t,v])=>setTimeout(()=>document.body.classList.toggle('off',!v),t));
+},{once:true});
+$('go').focus({preventScroll:true});
+})();
+</script>
+
+</body>
+</html>
